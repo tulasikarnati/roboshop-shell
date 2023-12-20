@@ -16,9 +16,9 @@ do
     fi
     IP_Address=$(aws ec2 run-instances --image-id $AMI --instance-type $INSTANCE_TYPE --security-group-ids $SG_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$i}]" --query "Instances[0].PrivateIpAddress" --output text)
     echo "$i: $IP_Address"
-done
 
-aws route53 change-resource-record-sets \
+    #creating rote53 records
+    aws route53 change-resource-record-sets \
   --hosted-zone-id $ZONE_ID \
   --change-batch "
   {
@@ -36,4 +36,6 @@ aws route53 change-resource-record-sets \
     }]
   }
   "
+done
+
 
